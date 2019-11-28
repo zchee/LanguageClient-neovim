@@ -17,14 +17,18 @@ class Source(Base):
     def __init__(self, vim):
         super().__init__(vim)
 
-        self.name = 'documentSymbol'
-        self.kind = 'file'
+        self.name = "documentSymbol"
+        self.kind = "file"
 
     def highlight(self):
         highlight_setup(self, SYMBOL_CANDIDATE_HIGHLIGHT_SYNTAX)
 
     def gather_candidates(self, context: Dict) -> List[Dict]:
         bufname = self.vim.current.buffer.name
-        result = self.vim.funcs.LanguageClient_runSync(
-            'LanguageClient_textDocument_documentSymbol', {}) or []
+        result = (
+            self.vim.funcs.LanguageClient_runSync(
+                "LanguageClient_textDocument_documentSymbol", {}
+            )
+            or []
+        )
         return convert_symbols_to_candidates(result, bufname)

@@ -17,16 +17,16 @@ class Source(Base):
         super().__init__(vim)
         self.vim = vim
 
-        self.name = 'workspaceSymbol'
-        self.kind = 'file'
+        self.name = "workspaceSymbol"
+        self.kind = "file"
 
     def highlight(self):
         highlight_setup(self, SYMBOL_CANDIDATE_HIGHLIGHT_SYNTAX)
 
     def gather_candidates(self, context):
-        context['is_interactive'] = True
-        prefix = context['input']
-        bufnr = context['bufnr']
+        context["is_interactive"] = True
+        prefix = context["input"]
+        bufnr = context["bufnr"]
 
         # This a hack to get around the fact that LanguageClient APIs
         # work in the context of the active buffer, when filtering results
@@ -39,15 +39,16 @@ class Source(Base):
         current_buffer = self.vim.current.buffer.number
         if current_buffer != bufnr:
             self.vim.command("tabedit %")
-            self.vim.command(
-                "execute 'noautocmd keepalt buffer' {}".format(bufnr))
-        result = self.vim.funcs.LanguageClient_runSync(
-            'LanguageClient#workspace_symbol', prefix, {}) or []
+            self.vim.command("execute 'noautocmd keepalt buffer' {}".format(bufnr))
+        result = (
+            self.vim.funcs.LanguageClient_runSync(
+                "LanguageClient#workspace_symbol", prefix, {}
+            )
+            or []
+        )
         if current_buffer != bufnr:
             self.vim.command("tabclose")
 
-        candidates = convert_symbols_to_candidates(
-            result,
-            pwd=self.vim.funcs.getcwd())
+        candidates = convert_symbols_to_candidates(result, pwd=self.vim.funcs.getcwd())
 
         return candidates
