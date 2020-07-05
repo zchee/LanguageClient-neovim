@@ -1007,11 +1007,11 @@ impl LanguageClient {
             error!("{}\n{:?}", message, e);
             self.vim()?.echoerr(&message)?;
         }
-        if let Err(e) = self.parse_semantic_scopes(&language_id, &result) {
-            let message = format!("LanguageClient: failed to parse semantic scopes: {}", e);
-            error!("{}\n{:?}", message, e);
-            self.vim()?.echoerr(&message)?;
-        }
+        // if let Err(e) = self.parseSemanticScopes(&languageId, &result) {
+        //    let message = format!("LanguageClient: failed to parse semantic scopes: {}", e);
+        //     error!("{}\n{:?}", message, e);
+        //     self.vim()?.echoerr(&message)?;
+        // }
 
         Ok(result)
     }
