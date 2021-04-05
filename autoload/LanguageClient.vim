@@ -1810,8 +1810,8 @@ function! s:ShowCompletionItemDocumentation(doc, completion_event) abort
     " favor pum_getpos output if available
     let l:pos = pum_getpos()
   endif
-  let l:x_pos = l:pos['width'] + l:pos['col'] + 1
-  call s:OpenHoverPreview('CompletionItemDocumentation', l:lines, l:kind, l:x_pos, l:pos['row'])
+  let l:x_pos = get(l:pos, 'width', 0) + get(l:pos, 'col', 0) + 1
+  call s:OpenHoverPreview('CompletionItemDocumentation', l:lines, l:kind, l:x_pos, get(l:pos, 'row', 0))
 endfunction
 
 " s:timer_stop tries to stop the timer with the given name by calling vim's
